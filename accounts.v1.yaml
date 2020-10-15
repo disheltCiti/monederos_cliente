@@ -8,9 +8,6 @@ info:
     url: citi.com.mx
     email: dishelt.torres@citi.com.mx
   termsOfService: citi.com.mx
-  x-logo:
-    url: 'https://redocly.github.io/redoc/petstore-logo.png'
-    altText: Petstore logo
 servers:
   - url: 'http://localhost:3100'
 paths:
