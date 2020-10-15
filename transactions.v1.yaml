@@ -6,6 +6,9 @@ info:
   contact:
     name: Miguel Escobar
     email: miguel.escobar@citi.com.mx
+  x-logo:
+    url: 'https://raw.githubusercontent.com/disheltCiti/monederos_cliente/master/CTPay_01.png'
+    altText: Ctpay
 servers:
   - url: 'http://localhost:3100'
 paths:
