@@ -1,0 +1,983 @@
+openapi: 3.0.0
+info:
+  title: accounts
+  version: '1.0'
+  description: Accounts api spec
+  contact:
+    name: Dishelt Torres
+    url: citi.com.mx
+    email: dishelt.torres@citi.com.mx
+  termsOfService: citi.com.mx
+servers:
+  - url: 'http://localhost:3100'
+paths:
+  /:
+    get:
+      summary: Get accounts by accountholder
+      tags:
+        - accounts
+        - getAccounts
+      responses:
+        '200':
+          description: 'Response retrieved. The responseCode field will show you the request result. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountsResponse'
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              description: Content type response
+              required: true
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        '401':
+          description: Unauthorized
+          headers:
+            Content-Type:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadSecurityResponse'
+        '403':
+          description: Forbidden
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadSecurityResponse'
+        '404':
+          description: Not Found
+          headers: {}
+        '500':
+          description: Internal Server Error
+      operationId: get-getAccount
+      description: Operation to retrieve accounts.
+      parameters:
+        - schema:
+            type: number
+            example: 10
+          in: query
+          name: offset
+          description: 'Pagination, index to start searching at when retrieving elements, used in combination with limit to paginate results.'
+        - schema:
+            type: number
+            example: 20
+          in: query
+          name: limit
+          description: 'Pagination, the number of elements to retrieve, used in combination with offset to paginate results'
+        - schema:
+            type: string
+          in: header
+          name: Content-Type
+          description: Content type header
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountsRequest'
+        description: Account list response for a user.
+    parameters: []
+    post:
+      summary: Create an account
+      operationId: post-createAccount
+      responses:
+        '200':
+          description: Response body for creating an account
+          headers:
+            Content-Type:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountCreateResponse'
+        '201':
+          description: Created
+          headers:
+            Content-Type:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountCreateResponse'
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        '401':
+          description: Unauthorized
+          headers:
+            Content-Type:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadSecurityResponse'
+        '403':
+          description: Forbidden
+          headers:
+            Content-Type:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadSecurityResponse'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      description: Resource to create an account
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Content-Type
+      tags:
+        - accounts
+        - createAccount
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountCreateRequest'
+        description: Request body for creating an account
+  '/{accountId}':
+    parameters:
+      - schema:
+          type: string
+        name: accountId
+        in: path
+        required: true
+    get:
+      summary: Get account by accountId
+      tags:
+        - accounts getAccount
+      responses:
+        '200':
+          description: Account model
+          headers:
+            Content-Type:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      operationId: get-accountId
+      description: Getting account by accountId
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Content-Type
+          required: true
+    put:
+      summary: Update an account
+      operationId: put-accountId
+      responses:
+        '200':
+          description: Account update request status
+          headers:
+            Content-Type:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountUpdateResponse'
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        '401':
+          description: Unauthorized
+          headers:
+            Content-Type:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadSecurityResponse'
+        '403':
+          description: Forbidden
+          headers:
+            Content-Type:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadSecurityResponse'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      description: Resource to update an account
+      tags:
+        - accounts
+        - updateAccount
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Content-Type
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountUpdateRequest'
+        description: Request body for update an account
+    delete:
+      summary: Delete an account by accountId
+      operationId: delete-accountId
+      responses:
+        '102':
+          description: Request already processing
+          headers:
+            Content-Type:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '200':
+          description: Request processed
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        '401':
+          description: Unauthorized
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadSecurityResponse'
+        '403':
+          description: Forbidden
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadSecurityResponse'
+        '404':
+          description: Not Found
+          headers: {}
+        '500':
+          description: Internal Server Error
+      description: Resource to delete an account
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Content-Type
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountDeleteRequest'
+        description: Delete account request
+      tags:
+        - accounts
+        - deleteAccount
+  '/{accountId}/status':
+    parameters:
+      - schema:
+          type: string
+        name: accountId
+        in: path
+        required: true
+    put:
+      summary: Update account status
+      operationId: put-accountId-status
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountStatusResponse'
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        '401':
+          description: Unauthorized
+          headers:
+            Content-Type:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadSecurityResponse'
+        '403':
+          description: Forbidden
+          headers:
+            Content-Type:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadSecurityResponse'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      description: Resource to change status account
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Content-Type
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountStatusRequest'
+        description: Request body for an account status request.
+      tags:
+        - accounts
+        - updateAccountStatus
+  '/{accountId}/balances':
+    parameters:
+      - schema:
+          type: string
+        name: accountId
+        in: path
+        required: true
+    get:
+      summary: Get balance by account
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BalanceResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response403'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fault'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fault'
+      operationId: get-accounts-accountId-balances
+      description: |
+        Retrieves customer account's balance information.
+
+        May retrieve the account balance information resource for a specific AccountId (which is retrieved in the call to GET /accounts).
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Content-Type
+  '/{accountHolderId}/balances':
+    parameters:
+      - schema:
+          type: string
+        name: accountHolderId
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BalancesResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response401'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response403'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      operationId: get-accountHolderId-balances
+      description: |
+        May optionally retrieve the account information resources in bulk. This will retrieve the resources for all authorised accounts linked to the account-request.
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Content-Type
+          required: true
+          description: Content type response
+        - schema:
+            type: string
+          in: header
+          name: companyId
+          description: equivalente a branchId -Identificador de la Entidad/Compañía/Sucursal subyacente
+          required: true
+        - schema:
+            type: integer
+          in: query
+          name: page_size
+          description: El número total de registros por página
+        - schema:
+            type: integer
+          in: query
+          name: page_start
+          description: El registro desde el que se debe mostrar la respuesta
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountHolderRequest'
+        description: Identifier of the customer.
+components:
+  schemas:
+    AccountsResponse:
+      title: Accounts list response
+      description: Model for retrieving accounts
+      x-examples:
+        example-1:
+          responseCode: string
+          responseMessage: string
+          responseSubject: string
+          messageType: string
+          transId: string
+          data:
+            - id: string
+              status: string
+              statusUpdateDateTime: string
+              currency: string
+              accountType: string
+              accountSubType: string
+              description: string
+              nickname: string
+              openingDate: string
+              account:
+                schemeName: string
+                identification: string
+                name: string
+                customerId: string
+        example-2:
+          responseCode: string
+          responseMessage: string
+          responseSubject: string
+          messageType: string
+          transId: string
+          data:
+            - id: string
+              status: string
+              statusUpdateDateTime: string
+              currency: string
+              accountType: string
+              accountSubType: string
+              description: string
+              nickname: string
+              openingDate: string
+              account:
+                schemeName: string
+                identification: string
+                name: string
+                customerId: string
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/Account'
+          required:
+            - data
+    Response:
+      title: Generic response
+      type: object
+      description: Generic response object
+      x-examples:
+        Generic response sample:
+          responseCode: ''
+          responseMessage: ''
+          responseSubject: ''
+          messageType: ''
+          transId: ''
+      properties:
+        responseCode:
+          type: string
+        responseMessage:
+          type: string
+        responseSubject:
+          type: string
+        messageType:
+          type: string
+        transId:
+          type: string
+      required:
+        - responseCode
+        - responseMessage
+        - responseSubject
+        - messageType
+        - transId
+    Account:
+      title: Account
+      x-examples:
+        Account sample:
+          accountId: ''
+      type: object
+      description: Account model for a user.
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+        statusUpdateDateTime:
+          type: string
+        currency:
+          type: string
+        accountType:
+          type: string
+        accountSubType:
+          type: string
+        description:
+          type: string
+        nickname:
+          type: string
+        openingDate:
+          type: string
+        account:
+          $ref: '#/components/schemas/AccountScheme'
+      required:
+        - id
+        - status
+        - statusUpdateDateTime
+        - currency
+        - accountType
+        - accountSubType
+        - description
+        - nickname
+        - openingDate
+    Request:
+      title: Generic request
+      type: object
+      description: Generic request object
+      properties:
+        externalId:
+          type: string
+      required:
+        - externalId
+    AccountsRequest:
+      title: AccountsRequest
+      allOf:
+        - $ref: '#/components/schemas/Request'
+        - type: object
+          properties:
+            accountHolderId:
+              type: string
+          required:
+            - accountHolderId
+      description: Model for retrieving a user account list.
+    AccountScheme:
+      title: AccountScheme
+      type: object
+      description: Account scheme for an account holded by a user.
+      x-examples:
+        example-1:
+          schemeName: string
+          identification: string
+          name: string
+          customerId: string
+      properties:
+        identification:
+          type: string
+        name:
+          type: string
+        accountHolderId:
+          type: string
+      required:
+        - identification
+        - name
+        - accountHolderId
+    Fault:
+      title: Fault
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        description:
+          type: string
+      description: Fault model.
+    BadRequestResponse:
+      $ref: '#/components/schemas/Fault'
+      description: Bad request response
+      x-examples:
+        example-1:
+          code: string
+          message: string
+          description: string
+    BadSecurityResponse:
+      $ref: '#/components/schemas/Fault'
+      description: Response for 401/403 status
+    AccountResponse:
+      title: AccountResponse
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/Account'
+    AccountRequest:
+      title: AccountRequest
+      type: object
+      description: |-
+        Example: 14095
+        Identifier of the account. Often referred to as the account number, yet for consistency this is always referred to as accountId. Accepts both IBAN & BBAN
+      properties:
+        accountId:
+          type: string
+      required:
+        - accountId
+    Response401:
+      title: Response401
+      type: object
+      properties:
+        fault:
+          $ref: '#/components/schemas/Fault'
+      x-examples:
+        example-1:
+          fault:
+            code: string
+            message: string
+            description: string
+    Response403:
+      title: Response403
+      type: object
+      properties:
+        fault:
+          $ref: '#/components/schemas/Fault'
+      x-examples:
+        example-1:
+          fault:
+            code: string
+            message: string
+            description: string
+    BalanceResponse:
+      title: Balance response
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/Balance'
+      x-examples:
+        example-1:
+          responseCode: string
+          responseMessage: string
+          responseSubject: string
+          messageType: string
+          transId: string
+          data:
+            AccountId: string
+            Amount:
+              amount: 0
+              currency: string
+            CreditDebitIndicator: string
+            Type: string
+            DateTime: string
+    Balance:
+      title: Balance
+      type: object
+      description: "Set of elements used to define the balance details.\t"
+      x-examples:
+        example-1:
+          AccountId: string
+          Amount:
+            amount: 0
+            currency: string
+          CreditDebitIndicator: string
+          Type: string
+          DateTime: string
+      properties:
+        AccountId:
+          type: string
+          description: A unique and immutable identifier used to identify the account resource. This identifier has no meaning to the account owner.
+        Amount:
+          $ref: '#/components/schemas/Amount'
+        CreditDebitIndicator:
+          type: string
+          description: 'Indicates whether the balance is a credit or a debit balance. Usage: A zero balance is considered to be a credit balance.'
+        Type:
+          type: string
+          description: 'Balance type, in a coded form.'
+        DateTime:
+          type: string
+          description: ndicates the date (and time) of the balance.
+    Amount:
+      title: Amount
+      type: object
+      description: Amount of money of the cash balance.
+      properties:
+        amount:
+          type: number
+          description: A number of monetary units specified in an active currency where the unit of currency is explicit and compliant with ISO 4217.
+        currency:
+          type: string
+          description: 'A code allocated to a currency by a Maintenance Agency under an international identification scheme, as described in the latest edition of the international standard ISO 4217 "Codes for the representation of currencies and funds".'
+    AccountHolderRequest:
+      title: AccountHolderRequest
+      type: object
+      description: Identifier of the customer.
+      properties:
+        accountHolderId:
+          type: string
+      required:
+        - accountHolderId
+    Response400:
+      title: Response400
+      type: object
+      properties:
+        fault:
+          $ref: '#/components/schemas/Fault'
+      x-examples:
+        example-1:
+          fault:
+            code: string
+            message: string
+            description: string
+    BalancesResponse:
+      title: Balances list response
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                balance:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Balance'
+      x-examples:
+        example-1:
+          responseCode: string
+          responseMessage: string
+          responseSubject: string
+          messageType: string
+          transId: string
+          data:
+            balance:
+              - AccountId: string
+                Amount:
+                  amount: 0
+                  currency: string
+                CreditDebitIndicator: string
+                Type: string
+                DateTime: string
+    AccountDeleteRequest:
+      title: AccountDeleteRequest
+      description: Model for delete an account
+      allOf:
+        - $ref: '#/components/schemas/Request'
+        - type: object
+          properties:
+            accountId:
+              type: string
+          required:
+            - accountId
+    AccountStatusRequest:
+      title: AccountStatusRequest
+      allOf:
+        - $ref: '#/components/schemas/Request'
+        - type: object
+          properties:
+            status:
+              type: string
+          required:
+            - status
+      description: Model for define a change status request
+    AccountStatusResponse:
+      title: AccountStatusResponse
+      description: Model for send a account status response
+      allOf:
+        - $ref: '#/components/schemas/Response'
+    AccountCreateRequest:
+      title: AccountCreateRequest
+      type: object
+      description: Model for create an account
+      properties:
+        accountType:
+          type: string
+        accountSubType:
+          type: string
+        name:
+          type: string
+        nickname:
+          type: string
+        currencyCode:
+          type: string
+        account:
+          $ref: '#/components/schemas/AccountCreateScheme'
+      required:
+        - accountType
+        - accountSubType
+        - name
+        - nickname
+    AccountCreateScheme:
+      title: AccountCreateScheme
+      type: object
+      properties:
+        identification:
+          type: string
+        accountHolderId:
+          type: string
+      description: Model for create an account scheme
+    AccountUpdateRequest:
+      title: AccountUpdateRequest
+      type: object
+      description: Model for update an account
+      properties:
+        name:
+          type: string
+        nickname:
+          type: string
+        currencyCode:
+          type: string
+        '':
+          $ref: '#/components/schemas/AccountUpdateScheme'
+    AccountUpdateScheme:
+      title: AccountUpdateScheme
+      type: object
+      description: Model for update an account update scheme
+      properties:
+        identification:
+          type: string
+    AccountUpdateResponse:
+      title: AccountUpdateResponse
+      allOf:
+        - $ref: '#/components/schemas/Response'
+      description: Model for update account response
+    AccountCreateResponse:
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - type: object
+          properties:
+            accountId:
+              type: string
+      title: AccountCreateResponse
+      description: Response model for creating an account
