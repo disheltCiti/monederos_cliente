@@ -1,0 +1,434 @@
+openapi: 3.0.0
+info:
+  title: transactions
+  version: '1.0'
+  description: Definition operations of Transactions
+  contact:
+    name: Miguel Escobar
+    email: miguel.escobar@citi.com.mx
+servers:
+  - url: 'http://localhost:3100'
+paths:
+  '/{accountHolderId}':
+    parameters:
+      - schema:
+          type: string
+        name: accountHolderId
+        in: path
+        required: true
+    get:
+      summary: Get transactions by accountHolderId
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      operationId: get-transactions-accountHolderId
+      description: obtaining transaction data through accountHolderId
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+            examples:
+              example-1:
+                value: {}
+        description: ''
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: offset
+        - schema:
+            type: string
+          in: query
+          name: limit
+  '/accountId/{accountId}':
+    get:
+      summary: Get transactions by accountId
+      operationId: get-transactions-accountId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      description: obtaining transaction data through accountId
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: offset
+        - schema:
+            type: string
+          in: query
+          name: limit
+        - schema:
+            type: string
+          in: query
+          name: minAmount
+        - schema:
+            type: string
+          in: query
+          name: maxAmount
+    parameters:
+      - schema:
+          type: string
+        name: accountId
+        in: path
+        required: true
+  '/funds/{accountId}':
+    parameters:
+      - schema:
+          type: string
+        name: accountId
+        in: path
+        required: true
+    get:
+      summary: Put Fund in accountId - cashOut
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FundsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      operationId: get-funds-accountId
+      description: obtaining funds data through accountId.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: offset
+        - schema:
+            type: string
+          in: query
+          name: limit
+    post:
+      summary: Post Fund in accountId - cashIn
+      operationId: post-funds-accountId
+      description: Allows the deposit of funds into an account.
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FundRequest'
+    put:
+      summary: ''
+      operationId: put-funds-accountId
+      responses:
+        '200':
+          description: OK
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response400'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      description: Allows you to withdraw funds from an account.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FundRequest'
+          application/xml:
+            schema:
+              type: object
+              properties: {}
+        description: ''
+components:
+  schemas:
+    TransactionResponse:
+      title: TransactionResponse
+      description: Response of transactions
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/Transaction'
+    Transaction:
+      title: Transaction
+      description: transaction response object
+      type: object
+      properties:
+        transactionId:
+          type: string
+        transactionReference:
+          type: string
+        status:
+          type: integer
+        bookingDateTime:
+          type: string
+        transactionInformation:
+          type: string
+        amount:
+          $ref: '#/components/schemas/AmountTransaction'
+        currencyExchange:
+          $ref: '#/components/schemas/CurrencyExchange'
+        bankTransactionCode:
+          $ref: '#/components/schemas/BankTransactionCode'
+        propietaryBankTransactionCode:
+          $ref: '#/components/schemas/PropietaryBankTransactionCode'
+        merchantDetail:
+          $ref: '#/components/schemas/MerchantDetail'
+        creditorAccount:
+          $ref: '#/components/schemas/CreditorAccount'
+        debtorAccount:
+          $ref: '#/components/schemas/DebtorAccount'
+        cardInstrument:
+          $ref: '#/components/schemas/CardInstrument'
+    Response:
+      title: Response
+      type: object
+      properties:
+        responseCode:
+          type: string
+        responseMessage:
+          type: string
+        responseSubject:
+          type: string
+        messageType:
+          type: string
+        transId:
+          type: string
+      description: Generic response object.
+    Response400:
+      title: Response400
+      type: object
+      description: Fault model Response 400.
+      properties:
+        fault:
+          $ref: '#/components/schemas/Fault'
+    Fault:
+      title: Fault
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        description:
+          type: string
+      description: Fault model.
+    Request:
+      title: Request
+      type: object
+      description: Generic request object.
+      properties:
+        externalId:
+          type: string
+    Fund:
+      title: Fund
+      type: object
+      description: Fund an amount on deposit account.
+      properties:
+        accountId:
+          type: string
+        amount:
+          type: number
+        creationDate:
+          type: string
+        externalReferenceId:
+          type: string
+        lastModifiedDate:
+          type: string
+        notes:
+          type: string
+        state:
+          type: string
+        seizedAmount:
+          type: integer
+    FundsResponse:
+      title: FundsResponse List
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/Fund'
+      description: Model for retrieving funds
+    FundRequest:
+      title: FundRequest
+      allOf:
+        - $ref: '#/components/schemas/Request'
+        - type: object
+          properties:
+            amount:
+              type: number
+            notes:
+              type: string
+      description: ''
+    TransactionsResponse:
+      title: TransactionsResponse
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/Transaction'
+    Account:
+      title: Account
+      type: object
+      description: Account model.
+      properties:
+        accountId:
+          type: string
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+    AccountsResponse:
+      title: AccountsResponse
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - type: object
+          properties:
+            accountHolderId:
+              type: string
+            accounts:
+              type: array
+              items:
+                $ref: '#/components/schemas/Account'
+    AmountTransaction:
+      title: AmountTransaction
+      type: object
+      properties:
+        amount:
+          type: number
+        currency:
+          type: string
+      description: Model AmountTransaction.
+    CurrencyExchange:
+      title: CurrencyExchange
+      type: object
+      properties:
+        sourceCurrency:
+          type: string
+        targetCurrency:
+          type: string
+        unitCurrency:
+          type: string
+        exchageRate:
+          type: string
+        quotationDate:
+          type: string
+    BankTransactionCode:
+      title: BankTransactionCode
+      type: object
+      description: Model BankTransactionCode.
+      properties:
+        code:
+          type: string
+        subcode:
+          type: string
+    PropietaryBankTransactionCode:
+      title: PropietaryBankTransactionCode
+      type: object
+      description: Model PropietaryBankTransactionCode.
+      properties:
+        code:
+          type: string
+        issuer:
+          type: string
+    MerchantDetail:
+      title: MerchantDetail
+      type: object
+      description: Model MerchantDetail.
+      properties:
+        merchantName:
+          type: string
+        merchantCategoryCode:
+          type: string
+    CreditorAccount:
+      title: CreditorAccount
+      type: object
+      description: Model CreditorAccount.
+      properties:
+        Identification:
+          type: string
+        name:
+          type: string
+        secondaryidentification:
+          type: string
+    DebtorAccount:
+      title: DebtorAccount
+      type: object
+      description: Model DebtorAccount.
+      properties:
+        Identification:
+          type: string
+        name:
+          type: string
+        secondaryIdentification:
+          type: string
+    CardInstrument:
+      title: CardInstrument
+      type: object
+      description: Model CardInstrument.
+      properties:
+        authorisationType:
+          type: string
+        name:
+          type: string
+        identification:
+          type: string
