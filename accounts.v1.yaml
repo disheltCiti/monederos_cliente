@@ -1,0 +1,1743 @@
+openapi: 3.0.0
+info:
+  title: accounts
+  version: '1.0'
+  description: Accounts api spec
+  contact:
+    name: Dishelt Torres
+    url: citi.com.mx
+    email: dishelt.torres@citi.com.mx
+  termsOfService: citi.com.mx
+servers:
+  - url: 'http://localhost:3100'
+paths:
+  /account-access-consents:
+    post:
+      tags:
+        - Account Access
+      summary: Create Account Access Consents
+      operationId: CreateAccountAccessConsents
+      parameters:
+        - name: x-fapi-auth-date
+          in: header
+          description: "The time when the user last logged in with the TPP. \nAll dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below: \nSun, 10 Sep 2017 19:43:31 UTC"
+          schema:
+            pattern: "^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \\d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d{4} \\d{2}:\\d{2}:\\d{2} (GMT|UTC)$"
+            type: string
+        - name: x-fapi-interaction-id
+          in: header
+          description: An RFC4122 UID used as a correlation id.
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          description: An Authorisation Token
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Default
+        content:
+          application/json; charset=utf-8:
+            schema:
+              $ref: '#/components/schemas/OBReadConsent1'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OBReadConsent1'
+          application/jose+jwe:
+            schema:
+              $ref: '#/components/schemas/OBReadConsent1'
+        required: true
+      responses:
+        '201':
+          description: Account Access Consents Created
+          headers:
+            x-fapi-interaction-id:
+              description: An RFC4122 UID used as a correlation id.
+              schema:
+                type: string
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/ResponseOBConsent'
+              examples:
+                Sample:
+                  value:
+                    Data:
+                      ConsentId: urn-alphabank-intent-88379
+                      Status: AwaitingAuthorisation
+                      StatusUpdateDateTime: '2017-05-02T00:00:00+00:00'
+                      CreationDateTime: '2017-05-02T00:00:00+00:00'
+                      Permissions:
+                        - ReadAccountsDetail
+                        - ReadBalances
+                        - ReadBeneficiariesDetail
+                        - ReadDirectDebits
+                        - ReadProducts
+                        - ReadStandingOrdersDetail
+                        - ReadTransactionsCredits
+                        - ReadTransactionsDebits
+                        - ReadTransactionsDetail
+                        - ReadOffers
+                        - ReadPAN
+                        - ReadParty
+                        - ReadPartyPSU
+                        - ReadScheduledPaymentsDetail
+                        - ReadStatementsDetail
+                      ExpirationDateTime: '2017-08-02T00:00:00+00:00'
+                      TransactionFromDateTime: '2017-05-03T00:00:00+00:00'
+                      TransactionToDateTime: '2017-12-03T00:00:00+00:00'
+                    Risk: {}
+                    Links:
+                      Self: 'https://api.alphabank.com/open-banking/v3.1/aisp/account-access-consents/urn-alphabank-intent-88379'
+                    Meta:
+                      TotalPages: 1
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OBReadConsentResponse1'
+            application/jose+jwe:
+              schema:
+                $ref: '#/components/schemas/OBReadConsentResponse1'
+        '400':
+          description: Bad request
+          headers:
+            x-fapi-interaction-id:
+              description: An RFC4122 UID used as a correlation id.
+              schema:
+                type: string
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/OBErrorResponse1'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OBErrorResponse1'
+            application/jose+jwe:
+              schema:
+                $ref: '#/components/schemas/OBErrorResponse1'
+        '401':
+          description: Unauthorized
+          headers:
+            x-fapi-interaction-id:
+              description: An RFC4122 UID used as a correlation id.
+              schema:
+                type: string
+          content: {}
+        '403':
+          description: Forbidden
+          headers:
+            x-fapi-interaction-id:
+              description: An RFC4122 UID used as a correlation id.
+              schema:
+                type: string
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/OBErrorResponse1'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OBErrorResponse1'
+            application/jose+jwe:
+              schema:
+                $ref: '#/components/schemas/OBErrorResponse1'
+        '404':
+          description: Not Found
+        '405':
+          description: Method Not Allowed
+          headers:
+            x-fapi-interaction-id:
+              description: An RFC4122 UID used as a correlation id.
+              schema:
+                type: string
+          content: {}
+        '500':
+          description: Internal Server Error
+          headers:
+            x-fapi-interaction-id:
+              description: An RFC4122 UID used as a correlation id.
+              schema:
+                type: string
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/OBErrorResponse1'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OBErrorResponse1'
+            application/jose+jwe:
+              schema:
+                $ref: '#/components/schemas/OBErrorResponse1'
+      x-codegen-request-body-name: OBReadConsent1Param
+      description: Create account access consent
+      security:
+        - API Key - 1:
+            - accounts
+  '/account-access-consents/{ConsentId}':
+    get:
+      tags:
+        - Account Access
+      summary: Get Account Access Consents
+      operationId: GetAccountAccessConsentsConsentId
+      parameters:
+        - name: ConsentId
+          in: path
+          description: ConsentId
+          required: true
+          schema:
+            type: string
+        - name: x-fapi-auth-date
+          in: header
+          description: "The time when the user last logged in with the TPP. \nAll dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below: \nSun, 10 Sep 2017 19:43:31 UTC"
+          schema:
+            pattern: "^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \\d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d{4} \\d{2}:\\d{2}:\\d{2} (GMT|UTC)$"
+            type: string
+        - name: x-fapi-interaction-id
+          in: header
+          description: An RFC4122 UID used as a correlation id.
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          description: An Authorisation Token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Account Access Consents Read
+          headers:
+            Content-Type:
+              description: Content-Type response header
+              schema:
+                type: string
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/ResponseOBConsent'
+              examples: {}
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OBReadConsentResponse1'
+            application/jose+jwe:
+              schema:
+                $ref: '#/components/schemas/OBReadConsentResponse1'
+        '400':
+          description: Bad request
+          headers:
+            x-fapi-interaction-id:
+              description: An RFC4122 UID used as a correlation id.
+              schema:
+                type: string
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/OBErrorResponse1'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OBErrorResponse1'
+            application/jose+jwe:
+              schema:
+                $ref: '#/components/schemas/OBErrorResponse1'
+        '401':
+          description: Unauthorized
+          headers:
+            x-fapi-interaction-id:
+              description: An RFC4122 UID used as a correlation id.
+              schema:
+                type: string
+          content: {}
+        '403':
+          description: Forbidden
+          headers:
+            x-fapi-interaction-id:
+              description: An RFC4122 UID used as a correlation id.
+              schema:
+                type: string
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/OBErrorResponse1'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OBErrorResponse1'
+            application/jose+jwe:
+              schema:
+                $ref: '#/components/schemas/OBErrorResponse1'
+        '404':
+          description: Not Found
+          headers:
+            x-fapi-interaction-id:
+              description: An RFC4122 UID used as a correlation id.
+              schema:
+                type: string
+          content: {}
+        '500':
+          description: Internal Server Error
+          headers:
+            x-fapi-interaction-id:
+              description: An RFC4122 UID used as a correlation id.
+              schema:
+                type: string
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/OBErrorResponse1'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OBErrorResponse1'
+            application/jose+jwe:
+              schema:
+                $ref: '#/components/schemas/OBErrorResponse1'
+      security:
+        - API Key - 1:
+            - accounts
+    delete:
+      tags:
+        - Account Access
+      summary: Delete Account Access Consents
+      operationId: DeleteAccountAccessConsentsConsentId
+      parameters:
+        - name: ConsentId
+          in: path
+          description: ConsentId
+          required: true
+          schema:
+            type: string
+        - name: x-fapi-auth-date
+          in: header
+          description: "The time when the PSU last logged in with the TPP. \nAll dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below: \nSun, 10 Sep 2017 19:43:31 UTC"
+          schema:
+            pattern: "^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \\d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d{4} \\d{2}:\\d{2}:\\d{2} (GMT|UTC)$"
+            type: string
+        - name: x-fapi-interaction-id
+          in: header
+          description: An RFC4122 UID used as a correlation id.
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          description: An Authorisation Token
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Account Access Consents Deleted
+          headers:
+            x-fapi-interaction-id:
+              description: An RFC4122 UID used as a correlation id.
+              schema:
+                type: string
+          content: {}
+        '400':
+          description: Bad request
+          headers:
+            x-fapi-interaction-id:
+              description: An RFC4122 UID used as a correlation id.
+              schema:
+                type: string
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/OBErrorResponse1'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OBErrorResponse1'
+            application/jose+jwe:
+              schema:
+                $ref: '#/components/schemas/OBErrorResponse1'
+        '401':
+          description: Unauthorized
+          headers:
+            x-fapi-interaction-id:
+              description: An RFC4122 UID used as a correlation id.
+              schema:
+                type: string
+          content: {}
+        '403':
+          description: Forbidden
+          headers:
+            x-fapi-interaction-id:
+              description: An RFC4122 UID used as a correlation id.
+              schema:
+                type: string
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/OBErrorResponse1'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OBErrorResponse1'
+            application/jose+jwe:
+              schema:
+                $ref: '#/components/schemas/OBErrorResponse1'
+        '405':
+          description: Method Not Allowed
+          headers:
+            x-fapi-interaction-id:
+              description: An RFC4122 UID used as a correlation id.
+              schema:
+                type: string
+          content: {}
+        '500':
+          description: Internal Server Error
+          headers:
+            x-fapi-interaction-id:
+              description: An RFC4122 UID used as a correlation id.
+              schema:
+                type: string
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/OBErrorResponse1'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OBErrorResponse1'
+            application/jose+jwe:
+              schema:
+                $ref: '#/components/schemas/OBErrorResponse1'
+      security:
+        - API Key - 1:
+            - accounts
+  /:
+    get:
+      summary: Get accounts by accountholder
+      tags:
+        - accounts
+        - getAccounts
+      responses:
+        '200':
+          description: 'Response retrieved. The responseCode field will show you the request result. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountsResponse'
+              examples:
+                Response sample:
+                  value:
+                    responseCode: '0'
+                    responseMessage: Success request
+                    responseSubject: Subject
+                    messageType: Success
+                    transId: '12312898491284'
+                    Data:
+                      Account:
+                        - AccountId: '22289'
+                          Status: Enabled
+                          StatusUpdateDateTime: '2019-01-01T06:06:06+00:00'
+                          Currency: GBP
+                          AccountType: Personal
+                          AccountSubType: CurrentAccount
+                          Nickname: Bills
+                          OpeningDate: 01-05-2002
+                          Account:
+                            - SchemeName: UK.OBIE.SortCodeAccountNumber
+                              Identification: '80200110203345'
+                              Name: Mr Kevin
+                              SecondaryIdentification: '00021'
+                        - AccountId: '31820'
+                          Status: Enabled
+                          StatusUpdateDateTime: '2018-01-01T06:06:06+00:00'
+                          Currency: GBP
+                          AccountType: Personal
+                          AccountSubType: CurrentAccount
+                          Nickname: Household
+                          Account:
+                            - SchemeName: UK.OBIE.SortCodeAccountNumber
+                              Identification: '80200110203348'
+                              Name: Mr Kevin
+                    Links:
+                      Self: 'https://api.alphabank.com/open-banking/v3.1/aisp/accounts/'
+                    Meta:
+                      TotalPages: 1
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              description: Content type response
+              required: true
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        '401':
+          description: Unauthorized
+          headers:
+            Content-Type:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadSecurityResponse'
+        '403':
+          description: Forbidden
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadSecurityResponse'
+        '404':
+          description: Not Found
+          headers: {}
+        '405':
+          description: Method Not Allowed
+        '500':
+          description: Internal Server Error
+      operationId: get-getAccounts
+      description: Operation to retrieve accounts. First Step The first step for an AISP after an account-request is authorised - is to call the GET /accounts endpoint.
+      parameters:
+        - schema:
+            type: number
+            example: 10
+          in: query
+          name: page_size
+          description: 'Pagination, index to start searching at when retrieving elements, used in combination with limit to paginate results.'
+        - schema:
+            type: number
+            example: 20
+          in: query
+          name: page_limit
+          description: 'Pagination, the number of elements to retrieve, used in combination with offset to paginate results'
+        - schema:
+            type: string
+          in: header
+          name: Content-Type
+          description: Content type header
+          required: true
+        - schema:
+            type: string
+          in: header
+          name: x-fapi-auth-date
+          description: "The time when the user last logged in with the TPP. \nAll dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below: \nSun, 10 Sep 2017 19:43:31 UTC"
+        - schema:
+            type: string
+          in: header
+          name: x-fapi-interaction-id
+          description: An RFC4122 UID used as a correlation id.
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+          description: An Authorisation Token
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountsRequest'
+        description: Account list response for a user.
+      security:
+        - API Key - 1:
+            - accounts
+    parameters: []
+  '/{accountId}':
+    parameters:
+      - schema:
+          type: string
+        name: accountId
+        in: path
+        required: true
+        description: Account Id from the user
+    get:
+      summary: Get account by accountId
+      tags:
+        - accounts getAccount
+      responses:
+        '200':
+          description: Account model
+          headers:
+            Content-Type:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      operationId: get-account-byId
+      description: Getting account by account Id
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Content-Type
+          required: true
+      security:
+        - API Key - 1:
+            - accounts
+    put:
+      summary: Update an account
+      operationId: put-accountId
+      responses:
+        '200':
+          description: Account update request status
+          headers:
+            Content-Type:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountUpdateResponse'
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        '401':
+          description: Unauthorized
+          headers:
+            Content-Type:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadSecurityResponse'
+        '403':
+          description: Forbidden
+          headers:
+            Content-Type:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadSecurityResponse'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      description: Resource to update an account
+      tags:
+        - accounts
+        - updateAccount
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Content-Type
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountUpdateRequest'
+        description: Request body for update an account
+      security:
+        - API Key - 1:
+            - accounts
+  '/{AccountId}/balances':
+    parameters:
+      - schema:
+          type: string
+        name: AccountId
+        in: path
+        required: true
+        description: AccountId
+    get:
+      summary: Get balance by account
+      tags: []
+      responses:
+        '200':
+          description: Account balance information response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BalanceResponse'
+              examples:
+                Sample:
+                  value:
+                    responseCode: '0'
+                    responseMessage: Success request
+                    responseSubject: Subject
+                    messageType: Success
+                    transId: '12312898491284'
+                    Data:
+                      AccountId: '22289'
+                      Amount:
+                        Amount: '300.00'
+                        Currency: GBP
+                      CreditDebitIndicator: Credit
+                      Type: InterimAvailable
+                      DateTime: '2017-04-05T10:43:07+00:00'
+                      CreditLine:
+                        - Included: false
+                          Amount:
+                            Amount: '500.00'
+                            Currency: GBP
+                          Type: Available
+                        - Included: false
+                          Amount:
+                            Amount: '500.00'
+                            Currency: GBP
+                          Type: Pre-Agreed
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              description: Content-Type header
+              required: true
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              description: Content-Type header
+              required: true
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadSecurityResponse'
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              description: Content-Type header
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadSecurityResponse'
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              description: Content-Type header
+        '404':
+          description: Not Found
+          headers: {}
+        '500':
+          description: Internal Server Error
+      operationId: GetAccountsAccountIdBalances
+      description: |
+        Retrieves customer account's balance information.
+
+        May retrieve the account balance information resource for a specific AccountId (which is retrieved in the call to GET /accounts).
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Content-Type
+          description: Content Type header
+        - schema:
+            type: string
+            pattern: "^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \\d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)             \\d{4} \\d{2}:\\d{2}:\\d{2} (GMT|UTC)$"
+          in: header
+          name: x-fapi-auth-date
+          description: "The time when the PSU last logged in with the TPP. \\nAll dates\\\n          \\ in the HTTP headers are represented as RFC 7231 Full Dates. An example\\\n          \\ is below: \\nSun, 10 Sep 2017 19:43:31 UTC"
+        - schema:
+            type: string
+          in: header
+          name: x-fapi-interaction-id
+          description: An RFC4122 UID used as a correlation id.
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+          description: An Authorisation Token
+      security:
+        - API Key - 1:
+            - accounts
+  /balances:
+    parameters: []
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: Balances response body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BalancesResponse'
+              examples:
+                Sample:
+                  value:
+                    responseCode: '0'
+                    responseMessage: Success request
+                    responseSubject: Subject
+                    messageType: Success
+                    transId: '12312898491284'
+                    Data:
+                      Balance:
+                        - AccountId: '22289'
+                          Amount:
+                            Amount: '1230.00'
+                            Currency: GBP
+                          CreditDebitIndicator: Credit
+                          Type: InterimAvailable
+                          DateTime: '2017-04-05T10:43:07+00:00'
+                          CreditLine:
+                            - Included: true
+                              Amount:
+                                Amount: '1000.00'
+                                Currency: GBP
+                              Type: Temporary
+                        - AccountId: '31820'
+                          Amount:
+                            Amount: '57.36'
+                            Currency: GBP
+                          CreditDebitIndicator: Debit
+                          Type: InterimBooked
+                          DateTime: '2017-05-02T14:22:09+00:00'
+                    Links:
+                      Self: 'https://api.alphabank.com/open-banking/v3.1/aisp/balances/'
+                    Meta:
+                      TotalPages: 1
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              description: Content-Type response header
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              description: Content-Type response header
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadSecurityResponse'
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              description: Content-Type response header
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadSecurityResponse'
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              description: Content-Type response header
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      operationId: get-accountHolderId-balances
+      description: |
+        May optionally retrieve the account information resources in bulk. This will retrieve the resources for all authorised accounts linked to the account-request.
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Content-Type
+          required: true
+          description: Content type request
+        - schema:
+            type: integer
+          in: query
+          name: page_size
+          description: 'Pagination, index to start searching at when retrieving elements, used in combination with limit to paginate results.'
+        - schema:
+            type: integer
+          in: query
+          name: page_start
+          description: 'Pagination, the number of elements to retrieve, used in combination with offset to paginate results'
+        - schema:
+            type: string
+          in: header
+          name: x-fapi-auth-date
+          description: "The time when the user last logged in with the TPP. \nAll dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below: \nSun, 10 Sep 2017 19:43:31 UTC"
+        - schema:
+            type: string
+          in: header
+          name: x-fapi-interaction-id
+          description: An RFC4122 UID used as a correlation id.
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+          description: An Authorisation Token
+      security:
+        - API Key - 1:
+            - accounts
+components:
+  schemas:
+    AccountsResponse:
+      title: Accounts list response
+      description: Model for retrieving accounts
+      x-examples:
+        example-1:
+          responseCode: string
+          responseMessage: string
+          responseSubject: string
+          messageType: string
+          transId: string
+          data:
+            - id: string
+              status: string
+              statusUpdateDateTime: string
+              currency: string
+              accountType: string
+              accountSubType: string
+              description: string
+              nickname: string
+              openingDate: string
+              account:
+                schemeName: string
+                identification: string
+                name: string
+                customerId: string
+        example-2:
+          responseCode: string
+          responseMessage: string
+          responseSubject: string
+          messageType: string
+          transId: string
+          data:
+            - id: string
+              status: string
+              statusUpdateDateTime: string
+              currency: string
+              accountType: string
+              accountSubType: string
+              description: string
+              nickname: string
+              openingDate: string
+              account:
+                schemeName: string
+                identification: string
+                name: string
+                customerId: string
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/Account'
+          required:
+            - data
+    Response:
+      title: Generic response
+      type: object
+      description: Generic response object
+      x-examples:
+        Generic response sample:
+          responseCode: '0'
+          responseMessage: Success request
+          responseSubject: Subject
+          messageType: Success
+          transId: '12312898491284'
+      properties:
+        responseCode:
+          type: string
+          description: Response code of the request
+        responseMessage:
+          type: string
+          description: Description of request result
+        responseSubject:
+          type: string
+          description: Subject of the request result
+        messageType:
+          type: string
+          description: |-
+            Type of the response:
+                        1-Success
+                        2-Info
+                        3-Warning
+                        4-Error
+        transId:
+          type: string
+          description: Internal id of the request
+      required:
+        - responseCode
+        - responseMessage
+        - responseSubject
+        - messageType
+        - transId
+    Account:
+      title: Account
+      x-examples:
+        Account sample:
+          openingDate: '2012-07-14T01:00:00+01:00'
+      type: object
+      description: Account model for a user.
+      properties:
+        accountId:
+          $ref: '#/components/schemas/AccountId'
+        status:
+          $ref: '#/components/schemas/OBAccountStatus1Code'
+        statusUpdateDateTime:
+          $ref: '#/components/schemas/StatusUpdateDateTime'
+        currency:
+          $ref: '#/components/schemas/ActiveOrHistoricCurrencyCode_0'
+        accountType:
+          $ref: '#/components/schemas/OBExternalAccountType1Code'
+        accountSubType:
+          $ref: '#/components/schemas/OBExternalAccountSubType1Code'
+        description:
+          type: string
+          description: Specifies the description of the account type.
+          maxLength: 35
+        nickname:
+          type: string
+          description: 'The nickname of the account, assigned by the account owner in order to provide an additional means of identification of the account.'
+          maxLength: 70
+        openingDate:
+          $ref: '#/components/schemas/ISODateTime'
+        account:
+          $ref: '#/components/schemas/AccountScheme'
+      required:
+        - accountId
+        - status
+        - statusUpdateDateTime
+        - currency
+        - accountType
+        - accountSubType
+        - description
+        - nickname
+        - openingDate
+    Request:
+      title: Generic request
+      type: object
+      description: Generic request object
+      properties:
+        externalId:
+          type: string
+          description: Unique inmutable request id.
+      required:
+        - externalId
+    AccountsRequest:
+      title: AccountsRequest
+      allOf:
+        - $ref: '#/components/schemas/Request'
+      description: Model for retrieving a user account list.
+    AccountScheme:
+      title: AccountScheme
+      type: object
+      description: Account scheme for an account holded by a user.
+      x-examples:
+        Account schema example:
+          identification: 123123ASDa123
+          name: Deposit Account
+          secondaryIdentification: Platinium
+          accountHolderId: 'e60bbb00-0f38-11eb-adc1-0242ac120002 '
+      properties:
+        identification:
+          type: string
+          description: Identification assigned by an institution to identify an account. This identification is known by the account owner.
+          maxLength: 35
+        name:
+          type: string
+          description: "The account name is the name or names of the account owner(s) represented at an account level, as displayed by the ASPSP's online channels. Note, the account name is not the product name or the nickname of the account."
+          maxLength: 350
+        accountHolderId:
+          type: string
+          description: Account holder of the account
+          maxLength: 32
+        secondaryIdentification:
+          type: string
+          description: 'This is secondary identification of the account, as assigned by the account servicing institution. This can be used by building societies to additionally identify accounts with a roll number (in addition to a sort code and account number combination).'
+          maxLength: 34
+      required:
+        - identification
+        - name
+        - accountHolderId
+        - secondaryIdentification
+    Fault:
+      title: Fault
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        description:
+          type: string
+      description: Fault model.
+    BadRequestResponse:
+      $ref: '#/components/schemas/Fault'
+      description: Bad request response
+      x-examples:
+        example-1:
+          code: string
+          message: string
+          description: string
+    BadSecurityResponse:
+      $ref: '#/components/schemas/Fault'
+      description: Response for 401/403 status
+    AccountResponse:
+      title: AccountResponse
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/Account'
+      x-examples:
+        Sample:
+          Data:
+            Account:
+              - AccountId: '22289'
+                Status: Enabled
+                StatusUpdateDateTime: '2019-01-01T06:06:06+00:00'
+                Currency: GBP
+                AccountType: Personal
+                AccountSubType: CurrentAccount
+                Nickname: Bills
+                Account:
+                  - SchemeName: UK.OBIE.SortCodeAccountNumber
+                    Identification: '80200110203345'
+                    Name: Mr Kevin
+                    SecondaryIdentification: '00021'
+          Links:
+            Self: 'https://api.alphabank.com/open-banking/v3.1/aisp/accounts/22289'
+          Meta:
+            TotalPages: 1
+    AccountRequest:
+      title: AccountRequest
+      type: object
+      description: |-
+        Example: 14095
+        Identifier of the account. Often referred to as the account number, yet for consistency this is always referred to as accountId. Accepts both IBAN & BBAN
+      properties:
+        accountId:
+          type: string
+      required:
+        - accountId
+    BalanceResponse:
+      title: Balance response
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - type: object
+          properties:
+            Data:
+              $ref: '#/components/schemas/Balance'
+          required:
+            - Data
+      x-examples:
+        example-1:
+          responseCode: string
+          responseMessage: string
+          responseSubject: string
+          messageType: string
+          transId: string
+          data:
+            AccountId: string
+            Amount:
+              amount: 0
+              currency: string
+            CreditDebitIndicator: string
+            Type: string
+            DateTime: string
+      description: Response for balance
+    Balance:
+      title: Balance
+      type: object
+      description: "Set of elements used to define the balance details.\t"
+      x-examples:
+        example-1:
+          AccountId: string
+          Amount:
+            amount: 0
+            currency: string
+          Type: string
+          DateTime: string
+      properties:
+        accountId:
+          $ref: '#/components/schemas/AccountId'
+        amount:
+          $ref: '#/components/schemas/OBActiveOrHistoricCurrencyAndAmount'
+        type:
+          $ref: '#/components/schemas/OBBalanceType1Code'
+        dateTime:
+          $ref: '#/components/schemas/ISODateTime'
+        creditLine:
+          $ref: '#/components/schemas/BalanceCreditLine'
+      required:
+        - accountId
+        - amount
+        - type
+        - dateTime
+        - creditLine
+    BalanceAmount:
+      title: Amount
+      type: object
+      description: Amount of money of the cash balance.
+      x-examples:
+        Amount object sample:
+          amount: '0.0'
+          currency: USD
+      properties:
+        amount:
+          $ref: '#/components/schemas/Account'
+        currency:
+          type: string
+          description: 'A code allocated to a currency by a Maintenance Agency under an international identification scheme, as described in the latest edition of the international standard ISO 4217 "Codes for the representation of currencies and funds".'
+          pattern: '^[A-Z]{3,3}$'
+      required:
+        - amount
+        - currency
+    AccountHolderRequest:
+      title: AccountHolderRequest
+      type: object
+      description: Identifier of the customer.
+      properties:
+        accountHolderId:
+          type: string
+      required:
+        - accountHolderId
+    BalancesResponse:
+      title: Balances list response
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - type: object
+          properties:
+            Data:
+              type: object
+              properties:
+                Balance:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Balance'
+      x-examples:
+        example-1:
+          responseCode: string
+          responseMessage: string
+          responseSubject: string
+          messageType: string
+          transId: string
+          data:
+            balance:
+              - AccountId: string
+                Amount:
+                  amount: 0
+                  currency: string
+                CreditDebitIndicator: string
+                Type: string
+                DateTime: string
+    AccountStatusRequest:
+      title: AccountStatusRequest
+      allOf:
+        - $ref: '#/components/schemas/Request'
+        - type: object
+          properties:
+            status:
+              type: string
+          required:
+            - status
+      description: Model for define a change status request
+    AccountStatusResponse:
+      title: AccountStatusResponse
+      description: Model for send a account status response
+      allOf:
+        - $ref: '#/components/schemas/Response'
+    AccountUpdateRequest:
+      title: AccountUpdateRequest
+      type: object
+      description: Model for update an account
+      properties:
+        nickname:
+          type: string
+          description: 'The nickname of the account, assigned by the account owner in order to provide an additional means of identification of the account.'
+          maxLength: 70
+      required:
+        - nickname
+      x-examples:
+        Update request example:
+          nickname: electronics account
+    AccountUpdateScheme:
+      title: AccountUpdateScheme
+      type: object
+      description: Model for update an account update scheme
+      properties:
+        identification:
+          type: string
+    AccountUpdateResponse:
+      title: AccountUpdateResponse
+      allOf:
+        - $ref: '#/components/schemas/Response'
+      description: Model for update account response
+    BalanceCreditLine:
+      title: BalanceCreditLine
+      type: object
+      description: Balance credit line object
+      x-examples:
+        Balance CreditLine sample:
+          'included:': true
+          type: ''
+          amount: '0.00'
+      properties:
+        included:
+          type: boolean
+          description: 'Indicates whether or not the credit line is included in the balance of the account. Usage: If not present, credit line is not included in the balance amount of the account.'
+        amount:
+          $ref: '#/components/schemas/OBActiveOrHistoricCurrencyAndAmount'
+        type:
+          type: string
+          description: "Limit type, in a coded form.\n  - Available Credit \n  - Emergency Pre-Agreed \n  - Temporary"
+          enum:
+            - Available Credit
+            - Emergency Pre-Agreed
+            - Temporary
+      required:
+        - included
+        - amount
+        - type
+    OBErrorResponse1:
+      required:
+        - Code
+        - Errors
+        - Message
+      type: object
+      properties:
+        Code:
+          maxLength: 40
+          minLength: 1
+          type: string
+          description: 'High level textual error code, to help categorize the errors.'
+        Id:
+          maxLength: 40
+          minLength: 1
+          type: string
+          description: 'A unique reference for the error instance, for audit purposes, in case of unknown/unclassified errors.'
+        Message:
+          maxLength: 500
+          minLength: 1
+          type: string
+          description: "Brief Error message, e.g., 'There is something wrong with the request parameters provided'"
+        Errors:
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/OBError1'
+      description: 'An array of detail error codes, and messages, and URLs to documentation to help remediation.'
+    OBError1:
+      required:
+        - ErrorCode
+        - Message
+      type: object
+      properties:
+        ErrorCode:
+          type: string
+          description: 'Low level textual error code, e.g., UK.OBIE.Field.Missing'
+          x-namespaced-enum:
+            - UK.OBIE.Field.Expected
+            - UK.OBIE.Field.Invalid
+            - UK.OBIE.Field.InvalidDate
+            - UK.OBIE.Field.Missing
+            - UK.OBIE.Field.Unexpected
+            - UK.OBIE.Header.Invalid
+            - UK.OBIE.Header.Missing
+            - UK.OBIE.Reauthenticate
+            - UK.OBIE.Resource.ConsentMismatch
+            - UK.OBIE.Resource.InvalidConsentStatus
+            - UK.OBIE.Resource.InvalidFormat
+            - UK.OBIE.Resource.NotFound
+            - UK.OBIE.Rules.AfterCutOffDateTime
+            - UK.OBIE.Rules.DuplicateReference
+            - UK.OBIE.Signature.Invalid
+            - UK.OBIE.Signature.InvalidClaim
+            - UK.OBIE.Signature.Malformed
+            - UK.OBIE.Signature.Missing
+            - UK.OBIE.Signature.MissingClaim
+            - UK.OBIE.Signature.Unexpected
+            - UK.OBIE.UnexpectedError
+            - UK.OBIE.Unsupported.AccountIdentifier
+            - UK.OBIE.Unsupported.AccountSecondaryIdentifier
+            - UK.OBIE.Unsupported.Currency
+            - UK.OBIE.Unsupported.Frequency
+            - UK.OBIE.Unsupported.LocalInstrument
+            - UK.OBIE.Unsupported.Scheme
+        Message:
+          maxLength: 500
+          minLength: 1
+          type: string
+          description: |-
+            A description of the error that occurred. e.g., 'A mandatory field isn't supplied' or 'RequestedExecutionDateTime must be in future'
+            OBIE doesn't standardise this field
+        Path:
+          maxLength: 500
+          minLength: 1
+          type: string
+          description: 'Recommended but optional reference to the JSON Path of the field with error, e.g., Data.Initiation.InstructedAmount.Currency'
+        Url:
+          type: string
+          description: 'URL to help remediate the problem, or provide more information, or to API Reference, or help etc'
+    OBReadConsent1:
+      required:
+        - Data
+        - Risk
+      type: object
+      properties:
+        Data:
+          required:
+            - Permissions
+          type: object
+          properties:
+            Permissions:
+              minItems: 1
+              type: array
+              items:
+                type: string
+                description: 'Specifies the Open Banking account access data types. This is a list of the data clusters being consented by the PSU, and requested for authorisation with the ASPSP.'
+                enum:
+                  - ReadAccountsBasic
+                  - ReadAccountsDetail
+                  - ReadBalances
+                  - ReadBeneficiariesBasic
+                  - ReadBeneficiariesDetail
+                  - ReadDirectDebits
+                  - ReadOffers
+                  - ReadPAN
+                  - ReadParty
+                  - ReadPartyPSU
+                  - ReadProducts
+                  - ReadScheduledPaymentsBasic
+                  - ReadScheduledPaymentsDetail
+                  - ReadStandingOrdersBasic
+                  - ReadStandingOrdersDetail
+                  - ReadStatementsBasic
+                  - ReadStatementsDetail
+                  - ReadTransactionsBasic
+                  - ReadTransactionsCredits
+                  - ReadTransactionsDebits
+                  - ReadTransactionsDetail
+            ExpirationDateTime:
+              type: string
+              description: "Specified date and time the permissions will expire.\nIf this is not populated, the permissions will be open ended.All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00"
+              format: date-time
+            TransactionFromDateTime:
+              type: string
+              description: "Specified start date and time for the transaction query period.\nIf this is not populated, the start date will be open ended, and data will be returned from the earliest available transaction.All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00"
+              format: date-time
+            TransactionToDateTime:
+              type: string
+              description: "Specified end date and time for the transaction query period.\nIf this is not populated, the end date will be open ended, and data will be returned to the latest available transaction.All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00"
+              format: date-time
+        Risk:
+          $ref: '#/components/schemas/OBRisk2'
+      description: Model for consent
+      x-examples:
+        Sample:
+          Data:
+            Permissions:
+              - ReadAccountsDetail
+              - ReadBalances
+              - ReadBeneficiariesDetail
+              - ReadDirectDebits
+              - ReadProducts
+              - ReadStandingOrdersDetail
+              - ReadTransactionsCredits
+              - ReadTransactionsDebits
+              - ReadTransactionsDetail
+              - ReadOffers
+              - ReadPAN
+              - ReadParty
+              - ReadPartyPSU
+              - ReadScheduledPaymentsDetail
+              - ReadStatementsDetail
+            ExpirationDateTime: '2017-05-02T00:00:00+00:00'
+            TransactionFromDateTime: '2017-05-03T00:00:00+00:00'
+            TransactionToDateTime: '2017-12-03T00:00:00+00:00'
+          Risk: {}
+      title: OBReadConsent1
+    OBReadConsentResponse1:
+      type: object
+      properties:
+        Data:
+          type: object
+          required:
+            - ConsentId
+            - CreationDateTime
+            - Status
+            - StatusUpdateDateTime
+            - Permissions
+          properties:
+            ConsentId:
+              maxLength: 128
+              minLength: 1
+              type: string
+              description: Unique identification as assigned to identify the account access consent resource.
+            CreationDateTime:
+              $ref: '#/components/schemas/CreationDateTime'
+            Status:
+              $ref: '#/components/schemas/OBAccountStatus1Code'
+            StatusUpdateDateTime:
+              $ref: '#/components/schemas/StatusUpdateDateTime'
+            Permissions:
+              minItems: 1
+              type: array
+              items:
+                type: string
+                description: 'Specifies the Open Banking account access data types. This is a list of the data clusters being consented by the PSU, and requested for authorisation with the ASPSP.'
+                enum:
+                  - ReadAccountsBasic
+                  - ReadAccountsDetail
+                  - ReadBalances
+                  - ReadBeneficiariesBasic
+                  - ReadBeneficiariesDetail
+                  - ReadDirectDebits
+                  - ReadOffers
+                  - ReadPAN
+                  - ReadParty
+                  - ReadPartyPSU
+                  - ReadProducts
+                  - ReadScheduledPaymentsBasic
+                  - ReadScheduledPaymentsDetail
+                  - ReadStandingOrdersBasic
+                  - ReadStandingOrdersDetail
+                  - ReadStatementsBasic
+                  - ReadStatementsDetail
+                  - ReadTransactionsBasic
+                  - ReadTransactionsCredits
+                  - ReadTransactionsDebits
+                  - ReadTransactionsDetail
+            ExpirationDateTime:
+              type: string
+              description: "Specified date and time the permissions will expire.\nIf this is not populated, the permissions will be open ended.All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00"
+              format: date-time
+            TransactionFromDateTime:
+              type: string
+              description: "Specified start date and time for the transaction query period.\nIf this is not populated, the start date will be open ended, and data will be returned from the earliest available transaction.All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00"
+              format: date-time
+            TransactionToDateTime:
+              type: string
+              description: "Specified end date and time for the transaction query period.\nIf this is not populated, the end date will be open ended, and data will be returned to the latest available transaction.All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00"
+              format: date-time
+        Risk:
+          $ref: '#/components/schemas/OBRisk2'
+        Links:
+          $ref: '#/components/schemas/Links'
+        Meta:
+          $ref: '#/components/schemas/Meta'
+      required:
+        - Data
+        - Risk
+      x-examples: {}
+      description: Model for consent response
+      title: ''
+    AccountId:
+      maxLength: 40
+      minLength: 1
+      type: string
+      description: A unique and immutable identifier used to identify the account resource. This identifier has no meaning to the account owner.
+    ActiveOrHistoricCurrencyCode_0:
+      pattern: '^[A-Z]{3,3}$'
+      type: string
+      description: "Identification of the currency in which the account is held. \nUsage: Currency should only be used in case one and the same account number covers several currencies\nand the initiating party needs to identify which currency needs to be used for settlement on the account."
+    ActiveOrHistoricCurrencyCode_1:
+      pattern: '^[A-Z]{3,3}$'
+      type: string
+      description: 'A code allocated to a currency by a Maintenance Agency under an international identification scheme, as described in the latest edition of the international standard ISO 4217 "Codes for the representation of currencies and funds".'
+    AddressLine:
+      maxLength: 70
+      minLength: 1
+      type: string
+      description: 'Information that locates and identifies a specific address for a transaction entry, that is presented in free format text.'
+    BeneficiaryId:
+      maxLength: 40
+      minLength: 1
+      type: string
+      description: A unique and immutable identifier used to identify the beneficiary resource. This identifier has no meaning to the account owner.
+    BookingDateTime:
+      type: string
+      description: "Date and time when a transaction entry is posted to an account on the account servicer's books.\nUsage: Booking date is the expected booking date, unless the status is booked, in which case it is the actual booking date.All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00"
+      format: date-time
+    BuildingNumber:
+      maxLength: 16
+      minLength: 1
+      type: string
+      description: Number that identifies the position of a building on a street.
+    CountryCode:
+      pattern: '^[A-Z]{2,2}$'
+      type: string
+      description: 'Nation with its own government, occupying a particular territory.'
+    CountrySubDivision:
+      maxLength: 35
+      minLength: 1
+      type: string
+      description: 'Identifies a subdivision of a country eg, state, region, county.'
+    CreationDateTime:
+      type: string
+      description: "Date and time at which the resource was created.All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00"
+      format: date-time
+    DateTime:
+      type: string
+      description: "Date and time associated with the date time type.All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00"
+      format: date-time
+    Meta:
+      title: MetaData
+      type: object
+      properties:
+        TotalPages:
+          type: integer
+          format: int32
+        FirstAvailableDateTime:
+          $ref: '#/components/schemas/ISODateTime'
+        LastAvailableDateTime:
+          $ref: '#/components/schemas/ISODateTime'
+      description: Meta Data relevant to the payload
+    ISODateTime:
+      type: string
+      description: "All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00"
+      format: date-time
+    Links:
+      required:
+        - Self
+      type: object
+      properties:
+        Self:
+          type: string
+          format: uri
+        First:
+          type: string
+          format: uri
+        Prev:
+          type: string
+          format: uri
+        Next:
+          type: string
+          format: uri
+        Last:
+          type: string
+          format: uri
+      description: Links relevant to the payload
+    StatusUpdateDateTime:
+      type: string
+      description: "Date and time at which the resource status was updated.All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00"
+      format: date-time
+      title: ''
+    OBRisk2:
+      type: object
+      description: The Risk section is sent by the initiating to the platform. It is used to specify additional details for risk scoring for Account Info.
+    ResponseOBConsent:
+      title: ResponseOBConsent
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - $ref: '#/components/schemas/OBReadConsentResponse1'
+    OBAccountStatus1Code:
+      type: string
+      description: Specifies the status of account resource in code form.
+      enum:
+        - Deleted
+        - Disabled
+        - Enabled
+        - Pending
+        - ProForma
+    ActiveOrHistoricCurrencyCode:
+      pattern: '^[A-Z]{3,3}$'
+      type: string
+      description: "Identification of the currency in which the account is held. \nUsage: Currency should only be used in case one and the same account number covers several currencies\nand the initiating party needs to identify which currency needs to be used for settlement on the account."
+    OBExternalAccountType1Code:
+      type: string
+      description: Specifies the type of account (personal or business).
+      enum:
+        - Business
+        - Personal
+    OBExternalAccountSubType1Code:
+      type: string
+      description: Specifies the sub type of account (product family group).
+      enum:
+        - ChargeCard
+        - CreditCard
+        - CurrentAccount
+        - EMoney
+        - Loan
+        - Mortgage
+        - PrePaidCard
+        - Savings
+    OBBalanceType1Code:
+      type: string
+      description: 'Balance type, in a coded form.'
+      enum:
+        - ClosingAvailable
+        - ClosingBooked
+        - ClosingCleared
+        - Expected
+        - ForwardAvailable
+        - Information
+        - InterimAvailable
+        - InterimBooked
+        - InterimCleared
+        - OpeningAvailable
+        - OpeningBooked
+        - OpeningCleared
+        - PreviouslyClosedBooked
+    OBActiveCurrencyAndAmount_SimpleType:
+      pattern: "^\\d{1,13}$|^\\d{1,13}\\.\\d{1,5}$"
+      type: string
+      description: A number of monetary units specified in an active currency where the unit of currency is explicit and compliant with ISO 4217.
+    OBActiveOrHistoricCurrencyAndAmount:
+      required:
+        - Amount
+        - Currency
+      type: object
+      properties:
+        Amount:
+          $ref: '#/components/schemas/OBActiveCurrencyAndAmount_SimpleType'
+        Currency:
+          $ref: '#/components/schemas/ActiveOrHistoricCurrencyCode_1'
+      description: The amount of the most recent direct debit collection.
+  securitySchemes:
+    API Key - 1:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: ''
+          tokenUrl: ''
+          refreshUrl: ''
+          scopes: {}
+        password:
+          tokenUrl: ''
+          refreshUrl: ''
+          scopes:
+            accounts: Accounts scope
+        clientCredentials:
+          tokenUrl: ''
+          refreshUrl: ''
+          scopes: {}
+security:
+  - undefined: []
